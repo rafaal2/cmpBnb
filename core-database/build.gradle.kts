@@ -60,7 +60,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.example.core-database"
+    namespace = "org.example.coreDatabase"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
@@ -91,7 +91,7 @@ compose.desktop {
     application {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.example.core-database"
+            packageName = "org.example.coreDatabase"
             packageVersion = "1.0.0"
         }
     }

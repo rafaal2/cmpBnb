@@ -53,6 +53,7 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -71,7 +72,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.example.core-network"
+    namespace = "org.example.coreNetwork"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
@@ -102,7 +103,7 @@ compose.desktop {
     application {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.example.core-network"
+            packageName = "org.example.coreNetwork"
             packageVersion = "1.0.0"
         }
     }
