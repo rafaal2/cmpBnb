@@ -29,6 +29,7 @@ object KtorClient {
                 accept(ContentType.Application.Json)
             }
         }
+
         install(HttpTimeout){
             socketTimeoutMillis = 3000
             connectTimeoutMillis = 3000
