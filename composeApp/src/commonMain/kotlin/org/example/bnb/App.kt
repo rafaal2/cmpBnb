@@ -1,48 +1,33 @@
 package org.example.bnb
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.example.bnb.game.ui.GameScreen
+import org.example.bnb.login.ui.LoginScreen
+import org.example.bnb.ui.theme.BnbTheme
 
-import bnb.composeapp.generated.resources.Res
-import bnb.composeapp.generated.resources.compose_multiplatform
+sealed class Screen {
+    object Login : Screen()
+    object Game : Screen()
+}
 
 @Composable
-@Preview
-fun App() {
-    MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
+// 👇 1. ADICIONE O PARÂMETRO AQUI
+fun App(startScreen: Screen) {
+    BnbTheme {
+
+        // 2. O ESTADO AGORA USA O PARÂMETRO RECEBIDO COMO VALOR INICIAL
+        var currentScreen by remember { mutableStateOf(startScreen) }
+
+        when (currentScreen) {
+            is Screen.Login -> {
+                LoginScreen(
+                    onLoginSuccess = {
+                        currentScreen = Screen.Game
+                    }
+                )
             }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
-                }
+            is Screen.Game -> {
+                GameScreen()
             }
         }
     }
