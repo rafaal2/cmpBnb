@@ -36,9 +36,8 @@ include(":composeApp")
 include(":core-database")
 include(":core-network")
 
-include(":game:ui")
-include(":game:data")
-include(":game:domain")
+include(":feature-game")
+include(":feature-login")
 
 include(":favorite:ui")
 include(":favorite:data")
