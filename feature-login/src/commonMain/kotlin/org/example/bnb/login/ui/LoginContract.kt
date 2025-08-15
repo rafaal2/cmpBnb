@@ -9,7 +9,10 @@ data class LoginState(
     val email: String = "",
     val password: String = "",
     val isLoading: Boolean = false,
-    val error: String? = null,
+    val error: String? = null, // Erro vindo da API
+    val emailError: String? = null, // Erro de validação do campo de e-mail
+    val passwordError: String? = null, // Erro de validação do campo de senha
+    val isLoginButtonEnabled: Boolean = false,
     val loginSuccess: Boolean = false
 )
 

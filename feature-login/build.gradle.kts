@@ -39,6 +39,7 @@ kotlin {
             implementation(libs.kotlinx.serialization)
             implementation(libs.kermit)
             implementation(libs.multiplatform.settings.noarg)
+            implementation(compose.materialIconsExtended)
 
         }
 
@@ -63,4 +64,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8 // Pode usar 1.8 para bibliotecas
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+}
+dependencies {
+    implementation(libs.androidx.ui.tooling.preview.android)
 }

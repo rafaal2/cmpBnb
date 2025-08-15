@@ -39,6 +39,9 @@ kotlin {
             implementation(projects.coreNetwork)
             implementation(libs.koin.android)
             implementation(libs.androidx.core.splashscreen)
+            implementation(libs.androidx.activity.compose) // Essencial para a integração da Activity
+            implementation(libs.androidx.core.ktx)
+            implementation(libs.material)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -99,6 +102,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.core)
     debugImplementation(compose.uiTooling)
 }
 

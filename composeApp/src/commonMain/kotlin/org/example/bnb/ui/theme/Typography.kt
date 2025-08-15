@@ -1,44 +1,32 @@
 package org.example.bnb.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
-// Define o esquema de cores para o MODO CLARO
-private val LightColorScheme = lightColorScheme(
-    primary = Blue,
-    secondary = Navy,
-    tertiary = Chartreuse,
-    background = Color.White,
-    surface = Color.White,
-)
-
-// Define o esquema de cores para o MODO ESCURO
-private val DarkColorScheme = darkColorScheme(
-    primary = LightBlue,
-    secondary = Navy,
-    tertiary = Chartreuse,
-    background = Color(0xFF1C1B1F),
-    surface = Color(0xFF1C1B1F),
-)
-
-// O Composable do Tema principal
+// Agora, nosso AppTypography vai usar a família de fontes Poppins
 @Composable
-fun BnbTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(), // Detecta o tema do sistema automaticamente
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+fun AppTypography(): Typography {
+    val poppins = poppinsFontFamily() // 1. Pega a nossa família de fontes
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = AppTypography,
-        content = content
+    return Typography( // 2. Usa 'poppins' em vez de 'FontFamily.Default'
+        bodyLarge = TextStyle(
+            fontFamily = poppins,
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp
+        ),
+        titleLarge = TextStyle(
+            fontFamily = poppins,
+            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp
+        ),
+        labelSmall = TextStyle(
+            fontFamily = poppins,
+            fontWeight = FontWeight.Medium,
+            fontSize = 11.sp
+        )
     )
 }

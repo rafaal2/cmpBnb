@@ -38,11 +38,3 @@ include(":core-network")
 
 include(":feature-game")
 include(":feature-login")
-
-include(":favorite:ui")
-include(":favorite:data")
-include(":favorite:domain")
-
-include(":search:ui")
-include(":search:data")
-include(":search:domain")

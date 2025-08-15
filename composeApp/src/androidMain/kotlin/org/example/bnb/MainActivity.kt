@@ -1,23 +1,28 @@
 package org.example.bnb
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity // 👈 1. MUDE A IMPORTAÇÃO E A HERANÇA
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import org.example.bnb.splash.SplashUiState
 import org.example.bnb.splash.SplashViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel // 👈 1. MUDE A IMPORTAÇÃO
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// 2. A Activity NÃO PRECISA mais implementar KoinComponent
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() { // 👈 HERDE DE AppCompatActivity
 
-    // 3. TROQUE 'inject()' por 'viewModel()'
     private val splashViewModel: SplashViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // 2. A CHAMADA DA SPLASH SCREEN DEVE VIR PRIMEIRO
+        val splashScreen = installSplashScreen()
+
         super.onCreate(savedInstanceState)
 
-        installSplashScreen().setKeepOnScreenCondition {
+        // 3. O RESTO DA CONFIGURAÇÃO VEM DEPOIS
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        splashScreen.setKeepOnScreenCondition {
             splashViewModel.uiState.value == SplashUiState.Loading
         }
 
