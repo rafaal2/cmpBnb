@@ -1,0 +1,9 @@
+<resources>
+    <style name="Theme.Bnb" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@android:color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/hotel</item>
+        <item name="postSplashScreenTheme">@style/Theme.Bnb</item>
+    </style>
+</resources>

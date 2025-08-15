@@ -11,8 +11,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginScreen(
-    // koinViewModel() vai usar o 'factory' que definimos no LoginModule
-    viewModel: LoginViewModel = koinViewModel()
+    viewModel: LoginViewModel = koinViewModel(),
+    onLoginSuccess: () -> Unit // <-- PARÂMETRO DE CALLBACK ADICIONADO
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -20,8 +20,7 @@ fun LoginScreen(
     // A lógica de navegação real dependeria da sua biblioteca de navegação.
     LaunchedEffect(state.loginSuccess) {
         if (state.loginSuccess) {
-            // navigator.navigateToHomeScreen()
-            println("Login bem-sucedido!")
+            onLoginSuccess() // <-- CHAMA O CALLBACK QUANDO O LOGIN DER CERTO
         }
     }
 

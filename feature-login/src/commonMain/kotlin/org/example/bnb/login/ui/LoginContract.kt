@@ -17,6 +17,6 @@ data class LoginState(
 sealed interface LoginEvent {
     data class OnEmailChange(val email: String) : LoginEvent
     data class OnPasswordChange(val password: String) : LoginEvent
-    object OnLoginClick : LoginEvent
-    object DismissError : LoginEvent
+    data object OnLoginClick : LoginEvent
+    data object DismissError : LoginEvent
 }

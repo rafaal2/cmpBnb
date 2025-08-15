@@ -12,7 +12,6 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-    jvm("desktop") // Habilita o alvo para Desktop/JVM
 
     sourceSets {
         commonMain.dependencies {
@@ -38,6 +37,8 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.kotlinx.serialization)
+            implementation(libs.kermit)
+            implementation(libs.multiplatform.settings.noarg)
 
         }
 

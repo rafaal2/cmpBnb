@@ -1,110 +1,55 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+// build.gradle.kts do módulo :core-network
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.composeHotReload)
-    alias(libs.plugins.kotlinx.serialization)
-
+    alias(libs.plugins.kotlinx.serialization) // Necessário para o Ktor processar JSON
 }
 
 kotlin {
-    androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
-    
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-        }
-    }
-    
-    jvm()
-    
-    sourceSets {
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.ktor.client.android)
+    // Define os alvos que esta biblioteca suporta
+    androidTarget()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
-        }
+    sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
+            // Dependências essenciais para a rede
             implementation(libs.kotlinx.serialization)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
-            implementation(libs.koin.core)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
-        jvmMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutinesSwing)
-            implementation(libs.ktor.client.desktop)
+            implementation(libs.ktor.client.logging) // Útil para debugging
 
+            // Dependência do Koin para poder definir o 'coreNetworkModule'
+            implementation(libs.koin.core)
+
+            implementation(libs.multiplatform.settings.noarg)
+        }
+
+        // Dependências de "motores" (engines) específicos de cada plataforma
+        androidMain.dependencies {
+            implementation(libs.ktor.client.android) // Engine OkHttp para Android
         }
         iosMain.dependencies {
-            implementation(libs.ktor.client.ios)
-
+            implementation(libs.ktor.client.ios) // Engine Darwin para iOS
         }
+//        desktopMain.dependencies { // O source set para jvm("desktop")
+//            implementation(libs.ktor.client.desktop) // Engine CIO para Desktop
+//        }
     }
 }
 
+// Configuração mínima para que o módulo seja uma biblioteca Android válida
 android {
-    namespace = "org.example.coreNetwork"
+    namespace = "org.example.bnb.core.network" // Namespace corrigido
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
-dependencies {
-    debugImplementation(compose.uiTooling)
-}
-
-compose.desktop {
-    application {
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.example.coreNetwork"
-            packageVersion = "1.0.0"
-        }
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }

@@ -28,19 +28,17 @@ kotlin {
             isStatic = true
         }
     }
-    
-    jvm()
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-           implementation(projects.featureGame)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(projects.coreNetwork)
             implementation(libs.koin.android)
+            implementation(libs.androidx.core.splashscreen)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -56,11 +54,20 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.multiplatform.settings.noarg)
+            implementation(project(":feature-login"))
+            implementation(project(":feature-game"))
+
         }
         commonTest.dependencies {
-            implementation(libs.kotlin.test)
+//            implementation(libs.kotlin.test)
         }
         iosMain.dependencies { }
+
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutinesSwing)
+        }
     }
 }
 

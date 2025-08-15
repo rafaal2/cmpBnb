@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidLibrary) // É uma biblioteca Android, não um app
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler) // Necessário para o @Composable
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 kotlin {
@@ -11,7 +12,6 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-    jvm("desktop") // Habilita o alvo para Desktop/JVM
 
     sourceSets {
         commonMain.dependencies {
@@ -28,10 +28,15 @@ kotlin {
 
             implementation(libs.coil)
             implementation(libs.coil.ktor)
-
+            implementation(libs.kermit)
             // Dependências dos módulos core que a feature precisa
             implementation(projects.coreNetwork)
             implementation(projects.coreDatabase) // Adicione esta se o game usar o DB
+
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.kotlinx.serialization)
         }
 
         // Dependências específicas de cada plataforma, se houver
@@ -44,7 +49,6 @@ kotlin {
     }
 }
 
-// Configuração mínima para que o módulo seja uma biblioteca Android válida
 android {
     namespace = "org.example.bnb.game"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
