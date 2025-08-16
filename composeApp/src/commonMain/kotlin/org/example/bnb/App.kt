@@ -1,33 +1,32 @@
 package org.example.bnb
 
 import androidx.compose.runtime.*
-import org.example.bnb.game.ui.GameScreen
-import org.example.bnb.login.ui.LoginScreen
 import org.example.bnb.ui.theme.BnbTheme
+import org.example.bnb.login.ui.LoginScreen
 
 sealed class Screen {
     object Login : Screen()
-    object Game : Screen()
+    object Main : Screen() // <-- Mudamos de Game para Main
 }
 
 @Composable
-// 👇 1. ADICIONE O PARÂMETRO AQUI
 fun App(startScreen: Screen) {
     BnbTheme {
-
-        // 2. O ESTADO AGORA USA O PARÂMETRO RECEBIDO COMO VALOR INICIAL
         var currentScreen by remember { mutableStateOf(startScreen) }
 
         when (currentScreen) {
             is Screen.Login -> {
                 LoginScreen(
                     onLoginSuccess = {
-                        currentScreen = Screen.Game
-                    }
+                        // Quando o login for bem-sucedido, vamos para a tela principal
+                        currentScreen = Screen.Main
+                    },
+                    onCreateAccountClick = { /* Lógica para criar conta */ }
                 )
             }
-            is Screen.Game -> {
-                GameScreen()
+            // A GameScreen agora é gerenciada pelo TabNavigator dentro da MainScreen
+            is Screen.Main -> {
+                MainScreen()
             }
         }
     }

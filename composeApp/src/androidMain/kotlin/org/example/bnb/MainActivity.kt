@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() { // 👈 HERDE DE AppCompatActivity
 
         setContent {
             val startScreen = when (splashViewModel.uiState.value) {
-                is SplashUiState.Authenticated -> Screen.Game
+                is SplashUiState.Authenticated -> Screen.Main // <-- Mude para Main
                 else -> Screen.Login
             }
             App(startScreen = startScreen)

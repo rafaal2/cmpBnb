@@ -44,6 +44,7 @@ kotlin {
             implementation(libs.material)
         }
         commonMain.dependencies {
+            implementation(compose.materialIconsExtended)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -60,6 +61,9 @@ kotlin {
             implementation(libs.multiplatform.settings.noarg)
             implementation(project(":feature-login"))
             implementation(project(":feature-game"))
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.tab.navigator)
+            implementation(libs.voyager.transitions)
 
         }
         commonTest.dependencies {

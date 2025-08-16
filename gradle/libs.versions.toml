@@ -24,7 +24,7 @@ androidx-splashscreen = "1.0.1"
 uiToolingPreviewAndroid = "1.9.0"
 androidx-material3 = "1.2.1"
 material = "1.12.0"
-
+voyager = "1.1.0-beta02"
 
 
 [libraries]
@@ -74,6 +74,9 @@ sql-delight-desktop = { module = "app.cash.sqldelight:sqlite-driver", version.re
 androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
 androidx-core = { group = "androidx.core", name = "core", version.ref = "androidx-core" }
 
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
