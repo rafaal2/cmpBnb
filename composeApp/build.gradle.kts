@@ -61,6 +61,7 @@ kotlin {
             implementation(libs.multiplatform.settings.noarg)
             implementation(project(":feature-login"))
             implementation(project(":feature-game"))
+            implementation(project(":feature-search"))
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.tab.navigator)
             implementation(libs.voyager.transitions)

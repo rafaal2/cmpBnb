@@ -4,8 +4,6 @@ import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.parameter
-// 👇 Garanta que o mapper correto está importado
 import org.example.bnb.game.data.mapper.toDomainModel
 import org.example.bnb.game.data.remote.response.GameResponse
 import org.example.bnb.game.domain.model.Game
@@ -15,22 +13,21 @@ class GameRepositoryImpl(
     private val httpClient: HttpClient
 ) : GameRepository {
 
-    private val BASE_URL = "https://api.rawg.io/api"
-    private val API_KEY = "8d716de8bd4f47439bf3526458e6c34b"
+    // 👇 MUDANÇA: A URL agora aponta para o seu servidor PHP local
+    private val GET_ALL_URL = "http://10.0.2.2/testeSession/api/get_all_acomodacoes.php"
 
     override suspend fun getGames(): Result<List<Game>> {
         return runCatching {
-            Logger.d("GameRepository") { "Buscando jogos da API..." }
+            Logger.d("GameRepository") { "Buscando acomodações da API local..." }
 
-            val response = httpClient.get("$BASE_URL/games") {
-                parameter("key", API_KEY)
-            }.body<GameResponse>()
+            // 👇 A chamada agora usa a nova URL, sem API Key
+            val response = httpClient.get(GET_ALL_URL).body<GameResponse>()
 
-            // 👇 CORREÇÃO: Chame o mapper diretamente na lista, sem o .map extra
+            // A lógica de mapeamento continua a mesma
             response.results.map { it.toDomainModel() }
 
         }.onFailure { error ->
-            Logger.e("GameRepository", error) { "Falha ao buscar jogos" }
+            Logger.e("GameRepository", error) { "Falha ao buscar acomodações" }
         }
     }
 }

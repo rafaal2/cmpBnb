@@ -38,3 +38,4 @@ include(":core-network")
 
 include(":feature-game")
 include(":feature-login")
+include(":feature-search")

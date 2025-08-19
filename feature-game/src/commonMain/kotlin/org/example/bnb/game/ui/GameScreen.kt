@@ -28,7 +28,7 @@ fun GameScreen(
     val state by viewModel.state.collectAsState()
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Games Populares") }) }
+        topBar = { TopAppBar(title = { Text("Acomodações populares") }) }
     ) { paddingValues ->
         GameScreenContent(
             modifier = Modifier.padding(paddingValues),

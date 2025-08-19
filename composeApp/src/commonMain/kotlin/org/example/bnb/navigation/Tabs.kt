@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Games
 import androidx.compose.material.icons.filled.House
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -24,8 +25,8 @@ internal object GameTab : Tab {
     override val options: TabOptions
         @Composable
         get() {
-            val icon = rememberVectorPainter(Icons.Default.Games)
-            return remember { TabOptions(index = 0u, title = "Games", icon = icon) }
+            val icon = rememberVectorPainter(Icons.Default.Search)
+            return remember { TabOptions(index = 0u, title = "Pesquisa", icon = icon) }
         }
 
     @Composable

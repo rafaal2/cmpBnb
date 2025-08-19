@@ -1,15 +1,17 @@
-package org.example.bnb.game.ui
+package org.example.bnb.game.ui // Ou o pacote da sua nova feature
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
@@ -19,58 +21,99 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import org.example.bnb.game.domain.model.Game
+import org.example.bnb.game.domain.model.Game // Adapte se o modelo mudou
 
 @Composable
 fun GameItem(
-    game: Game,
-    onClick: () -> Unit, // Callback para quando o item for clicado
+    game: Game, // Supondo que 'Game' agora tenha 'rating' e 'price'
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .padding(8.dp)
-            .aspectRatio(0.75f) // Um formato mais retangular, como uma capa de jogo
-            .clickable(onClick = onClick), // Torna o card clicável
+            .aspectRatio(1f), // <-- MUDANÇA: Proporção 1 para 1 (quadrado)
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.BottomStart
+            modifier = Modifier.fillMaxSize().clickable(onClick = onClick)
         ) {
+            // Imagem de fundo
             AsyncImage(
                 model = game.imageUrl,
                 contentDescription = game.name,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
-
-                // 👇 CORREÇÃO: Use 'placeholder' e 'error' com um Painter
                 placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceVariant),
                 error = ColorPainter(MaterialTheme.colorScheme.surfaceVariant)
             )
 
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .align(Alignment.BottomCenter) // 1. Alinha o Box na base do contêiner pai
+                    .fillMaxWidth()               // 2. Faz o Box ocupar toda a largura
+                    .fillMaxHeight(0.4f)          // 3. Faz o Box ocupar 40% da altura (ajuste conforme o gosto)
                     .background(
                         Brush.verticalGradient(
+                            // 4. O gradiente agora vai de preto (embaixo) para transparente (em cima)
                             colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f)),
-                            startY = 400f
                         )
                     )
             )
 
-            Text(
-                text = game.name,
-                modifier = Modifier.padding(12.dp),
-                style = MaterialTheme.typography.titleMedium.copy(
+            // --- NOVO: Avaliação (Rating) no topo ---
+            Row(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp)
+                    .clip(CircleShape)
+                    .background(Color.Black.copy(alpha = 0.5f))
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Avaliação",
+                    tint = Color.Yellow,
+                    modifier = Modifier.size(16.dp)
+                )
+                Text(
+                    text = game.rating.toString(),
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                ),
-                maxLines = 2, // Garante que o texto não ocupe a tela toda
-                overflow = TextOverflow.Ellipsis
-            )
+                    fontSize = 14.sp,
+                )
+            }
+
+            // --- NOVO: Coluna para Nome e Preço na base ---
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(12.dp)
+            ) {
+                Text(
+                    text = game.name,
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    ),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = "R$ ${game.price} / noite",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp
+                    )
+                )
+            }
         }
     }
 }

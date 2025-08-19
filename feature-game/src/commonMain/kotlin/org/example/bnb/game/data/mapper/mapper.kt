@@ -9,5 +9,7 @@ fun GameDto.toDomainModel(): Game {
         id = this.id.toString(), // Converta o ID para String se o modelo de domínio espera String
         name = this.name,
         imageUrl = this.backgroundImage ?: "", // Use "" como padrão se a imagem for nula
+        rating = this.rating,
+        price = this.price
     )
 }

@@ -1,46 +1,117 @@
 package org.example.bnb
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.CurrentTab
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
+import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import org.example.bnb.navigation.FavoritesTab
 import org.example.bnb.navigation.GameTab
 import org.example.bnb.navigation.ProfileTab
 import org.example.bnb.navigation.ReserveTab
+import org.example.bnb.search.ui.SearchScreen // Importe a tela de busca
 
+/**
+ * Define a MainScreen como um objeto 'Screen' da Voyager.
+ * Este é o ponto de entrada para toda a seção principal do app (pós-login).
+ */
+object MainScreen : Screen {
+    @Composable
+    override fun Content() {
+        // Chama o Composable que contém a UI real.
+        MainScreenContent()
+    }
+}
+
+/**
+ * Contém a UI real da tela principal, com o Scaffold, TopAppBar,
+ * BottomNavigationBar e o navegador de abas.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
-    // 1. Inicia o TabNavigator, definindo a GameTab como a aba inicial.
+private fun MainScreenContent() {
+    // Pega o Navigator principal (que foi criado no App.kt).
+    // Usaremos ele para abrir telas por cima das abas, como a de busca.
+    val navigator = LocalNavigator.currentOrThrow
+
+    // O TabNavigator gerencia o estado das abas (qual está selecionada).
     TabNavigator(GameTab) { tabNavigator ->
         Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        // Barra de busca "falsa" que serve como um botão
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(end = 16.dp)
+                                .height(48.dp)
+                                .clickable {
+                                    // AÇÃO: Navega para a tela de busca real ao ser clicada
+                                    navigator.push(SearchScreen)
+                                }
+                                .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Ícone de busca",
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = "Pesquisa",
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                        }
+                    }
+                )
+            },
             content = { paddingValues ->
-                // 2. A Voyager exibe o conteúdo da aba atual aqui.
                 Box(modifier = Modifier.padding(paddingValues)) {
+                    // A Voyager exibe o conteúdo da aba atual aqui
                     CurrentTab()
                 }
             },
             bottomBar = {
                 NavigationBar {
-                    val tabs = listOf(GameTab, FavoritesTab, ReserveTab,ProfileTab)
-
-                    tabs.forEach { tab ->
-                        NavigationBarItem(
-                            selected = tabNavigator.current == tab,
-                            onClick = { tabNavigator.current = tab },
-                            icon = { Icon(painter = tab.options.icon!!, contentDescription = tab.options.title) },
-                            label = { Text(tab.options.title) }
-                        )
-                    }
+                    // Os itens da barra de navegação
+                    TabNavigationItem(tab = GameTab)
+                    TabNavigationItem(tab = FavoritesTab)
+                    TabNavigationItem(tab = ReserveTab)
+                    TabNavigationItem(tab = ProfileTab)
                 }
             }
         )
     }
+}
+
+/**
+ * Um Composable helper para criar os itens da Bottom Navigation Bar, evitando repetição.
+ */
+@Composable
+private fun RowScope.TabNavigationItem(tab: Tab) {
+    val tabNavigator = LocalTabNavigator.current
+
+    NavigationBarItem(
+        selected = tabNavigator.current.options.index == tab.options.index,
+        onClick = { tabNavigator.current = tab },
+        icon = { Icon(painter = tab.options.icon!!, contentDescription = tab.options.title) },
+        label = { Text(tab.options.title) }
+    )
 }

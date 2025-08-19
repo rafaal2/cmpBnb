@@ -2,24 +2,20 @@ package org.example.bnb
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity // 👈 1. MUDE A IMPORTAÇÃO E A HERANÇA
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import org.example.bnb.splash.SplashUiState
 import org.example.bnb.splash.SplashViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() { // 👈 HERDE DE AppCompatActivity
+class MainActivity : AppCompatActivity() {
 
     private val splashViewModel: SplashViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // 2. A CHAMADA DA SPLASH SCREEN DEVE VIR PRIMEIRO
         val splashScreen = installSplashScreen()
-
         super.onCreate(savedInstanceState)
-
-        // 3. O RESTO DA CONFIGURAÇÃO VEM DEPOIS
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         splashScreen.setKeepOnScreenCondition {
@@ -27,9 +23,10 @@ class MainActivity : AppCompatActivity() { // 👈 HERDE DE AppCompatActivity
         }
 
         setContent {
+            // 👇 CORREÇÃO AQUI: Use o novo nome 'AppScreen'
             val startScreen = when (splashViewModel.uiState.value) {
-                is SplashUiState.Authenticated -> Screen.Main // <-- Mude para Main
-                else -> Screen.Login
+                is SplashUiState.Authenticated -> AppScreen.Main
+                else -> AppScreen.Login
             }
             App(startScreen = startScreen)
         }
