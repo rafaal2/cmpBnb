@@ -28,7 +28,7 @@ kotlin {
 
             implementation(libs.coil)
             implementation(libs.coil.ktor)
-            implementation(libs.kermit)
+
             // Dependências dos módulos core que a feature precisa
             implementation(projects.coreNetwork)
             implementation(projects.coreDatabase) // Adicione esta se o game usar o DB
@@ -37,8 +37,13 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.kotlinx.serialization)
+            implementation(libs.kermit)
+            implementation(libs.multiplatform.settings.noarg)
             implementation(compose.materialIconsExtended)
-            implementation(project(":feature-listing-details"))
+
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.tab.navigator)
+            implementation(libs.voyager.transitions)
         }
 
         // Dependências específicas de cada plataforma, se houver
@@ -51,8 +56,9 @@ kotlin {
     }
 }
 
+// Configuração mínima para que o módulo seja uma biblioteca Android válida
 android {
-    namespace = "org.example.bnb.game"
+    namespace = "org.example.bnb.listingdetails"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -61,4 +67,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8 // Pode usar 1.8 para bibliotecas
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+}
+dependencies {
+    implementation(libs.androidx.ui.tooling.preview.android)
 }

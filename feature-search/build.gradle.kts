@@ -44,6 +44,7 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.tab.navigator)
             implementation(libs.voyager.transitions)
+            implementation(project(":feature-listing-details"))
         }
 
         // Dependências específicas de cada plataforma, se houver

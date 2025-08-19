@@ -62,6 +62,8 @@ kotlin {
             implementation(project(":feature-login"))
             implementation(project(":feature-game"))
             implementation(project(":feature-search"))
+            implementation(project(":feature-listing-details"))
+            implementation(project(":core-navigation"))
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.tab.navigator)
             implementation(libs.voyager.transitions)

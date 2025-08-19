@@ -6,6 +6,7 @@ import org.example.bnb.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.example.bnb.game.di.gameModule
+import org.example.bnb.listingdetails.di.listingDetailsModule
 import org.example.bnb.login.di.loginModule
 import org.example.bnb.search.di.searchModule
 import org.example.coreNetwork.di.coreNetworkModule
@@ -22,6 +23,7 @@ class BnbApplication : Application() {
                 loginModule,
                 searchModule,
                 coreNetworkModule,
+                listingDetailsModule,
                 imageLoaderModule()
                 // coreDatabaseModule
             )

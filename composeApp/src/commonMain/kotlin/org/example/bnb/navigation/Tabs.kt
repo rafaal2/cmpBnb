@@ -77,7 +77,7 @@ internal object ProfileTab : Tab {
         @Composable
         get() {
             val icon = rememberVectorPainter(Icons.Default.Person)
-            return remember { TabOptions(index = 2u, title = "Perfil", icon = icon) }
+            return remember { TabOptions(index = 3u, title = "Perfil", icon = icon) }
         }
 
     @Composable

@@ -35,7 +35,9 @@ plugins {
 include(":composeApp")
 include(":core-database")
 include(":core-network")
+include(":core-navigation")
 
 include(":feature-game")
 include(":feature-login")
 include(":feature-search")
+include(":feature-listing-details")
