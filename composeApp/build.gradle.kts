@@ -60,7 +60,7 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.multiplatform.settings.noarg)
             implementation(project(":feature-login"))
-            implementation(project(":feature-game"))
+            implementation(project(":feature-discover"))
             implementation(project(":feature-search"))
             implementation(project(":feature-listing-details"))
             implementation(project(":core-navigation"))

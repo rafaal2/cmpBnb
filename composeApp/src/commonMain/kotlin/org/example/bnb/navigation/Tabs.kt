@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Games
 import androidx.compose.material.icons.filled.House
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
@@ -14,30 +13,36 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import org.example.bnb.game.ui.GameScreen
-// Importe as outras telas quando existirem
-// import org.example.bnb.favorites.ui.FavoritesScreen
-// import org.example.bnb.profile.ui.ProfileScreen
+import cafe.adriel.voyager.transitions.SlideTransition
+import org.example.bnb.core.navigation.AppRoute
+import org.example.bnb.discover.ui.DiscoverScreen
+import org.example.bnb.listingdetails.ui.ListingDetailsScreen
 
-internal object GameTab : Tab {
+internal object DiscoverTab : Tab {
     override val options: TabOptions
-        @Composable
-        get() {
+        @Composable get() {
             val icon = rememberVectorPainter(Icons.Default.Search)
-            return remember { TabOptions(index = 0u, title = "Pesquisa", icon = icon) }
+            return remember { TabOptions(index = 0u, title = "Descobrir", icon = icon) }
         }
 
     @Composable
     override fun Content() {
-        // Aqui chamamos a tela da nossa feature!
-        GameScreen(
-            onGameClick = { gameId ->
-                // No futuro, a navegação para os detalhes do jogo aconteceria aqui
-                println("Game clicked: $gameId")
+        val rootNavigator = rememberRootNavigator()
+
+        DiscoverScreen(
+            onNavigate = { route ->
+                when (route) {
+                    is AppRoute.ListingDetails -> rootNavigator.push(ListingDetailsScreen(route.listingId))
+                    is AppRoute.Search -> { /* rootNavigator.push(SearchScreen) */ }
+                }
             }
-        )
+        ).Content()
     }
 }
 
@@ -51,8 +56,6 @@ internal object FavoritesTab : Tab {
 
     @Composable
     override fun Content() {
-        // Substitua por FavoritesScreen() quando ela existir
-        // FavoritesScreen()
         ComingSoonScreen(tabName = "Favoritos")
     }
 }
@@ -67,8 +70,6 @@ internal object ReserveTab : Tab {
 
     @Composable
     override fun Content() {
-        // Substitua por ProfileScreen() quando ela existir
-        // ProfileScreen()
         ComingSoonScreen(tabName = "Reservas")
     }
 }
@@ -82,16 +83,14 @@ internal object ProfileTab : Tab {
 
     @Composable
     override fun Content() {
-        // Substitua por ProfileScreen() quando ela existir
-        // ProfileScreen()
         ComingSoonScreen(tabName = "Perfil")
     }
 }
 
-// Composable temporário para as telas que ainda não existem
 @Composable
 private fun ComingSoonScreen(tabName: String) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text("Tela de $tabName em breve...")
     }
 }
+

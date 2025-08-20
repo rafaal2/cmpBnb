@@ -56,9 +56,9 @@ data class AmenityDto(
 
 @Serializable
 data class ReviewDto(
-    @SerialName("authorName")
+    @SerialName("author_name")
     val authorName: String,
-    @SerialName("authorAvatarUrl")
+    @SerialName("author_avatar_url")
     val authorAvatarUrl: String,
     val date: String,
     val comment: String

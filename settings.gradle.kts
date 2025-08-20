@@ -37,7 +37,7 @@ include(":core-database")
 include(":core-network")
 include(":core-navigation")
 
-include(":feature-game")
+include(":feature-discover")
 include(":feature-login")
 include(":feature-search")
 include(":feature-listing-details")

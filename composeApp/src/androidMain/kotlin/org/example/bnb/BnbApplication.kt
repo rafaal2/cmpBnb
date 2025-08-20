@@ -5,7 +5,7 @@ import org.example.bnb.core.di.imageLoaderModule
 import org.example.bnb.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import org.example.bnb.game.di.gameModule
+import org.example.bnb.discover.di.discoverModule
 import org.example.bnb.listingdetails.di.listingDetailsModule
 import org.example.bnb.login.di.loginModule
 import org.example.bnb.search.di.searchModule
@@ -19,7 +19,7 @@ class BnbApplication : Application() {
             androidContext(this@BnbApplication)
             modules(
                 appModule, // 👈 2. ADICIONE O NOVO MÓDULO À LISTA
-                gameModule,
+                discoverModule,
                 loginModule,
                 searchModule,
                 coreNetworkModule,

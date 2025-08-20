@@ -18,8 +18,8 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import org.example.bnb.navigation.DiscoverTab
 import org.example.bnb.navigation.FavoritesTab
-import org.example.bnb.navigation.GameTab
 import org.example.bnb.navigation.ProfileTab
 import org.example.bnb.navigation.ReserveTab
 import org.example.bnb.search.ui.SearchScreen // Importe a tela de busca
@@ -48,7 +48,7 @@ private fun MainScreenContent() {
     val navigator = LocalNavigator.currentOrThrow
 
     // O TabNavigator gerencia o estado das abas (qual está selecionada).
-    TabNavigator(GameTab) { tabNavigator ->
+    TabNavigator(DiscoverTab) { tabNavigator ->
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -91,7 +91,7 @@ private fun MainScreenContent() {
             bottomBar = {
                 NavigationBar {
                     // Os itens da barra de navegação
-                    TabNavigationItem(tab = GameTab)
+                    TabNavigationItem(tab = DiscoverTab)
                     TabNavigationItem(tab = FavoritesTab)
                     TabNavigationItem(tab = ReserveTab)
                     TabNavigationItem(tab = ProfileTab)
