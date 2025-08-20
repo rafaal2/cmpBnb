@@ -16,7 +16,6 @@ import org.example.bnb.login.ui.LoginScreen
 sealed class AppScreen : Screen {
     @Composable
     override fun Content() {
-        // O conteúdo real é definido em cada objeto filho.
     }
 
     data object Login : AppScreen() {
@@ -25,8 +24,6 @@ sealed class AppScreen : Screen {
             val navigator = LocalNavigator.currentOrThrow
             LoginScreen(
                 onLoginSuccess = {
-                    // Substitui a tela de login pela tela principal.
-                    // O usuário não poderá voltar para o login.
                     navigator.replaceAll(Main)
                 }
             )
@@ -36,7 +33,6 @@ sealed class AppScreen : Screen {
     data object Main : AppScreen() {
         @Composable
         override fun Content() {
-            // Chama o Composable da tela principal, que contém as abas.
             MainScreen.Content()
         }
     }

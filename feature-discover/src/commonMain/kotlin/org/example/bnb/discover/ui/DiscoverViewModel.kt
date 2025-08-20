@@ -1,4 +1,4 @@
-package org.example.bnb.discover.ui // Pacote atualizado
+package org.example.bnb.discover.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,33 +9,32 @@ import kotlinx.coroutines.launch
 import org.example.bnb.discover.domain.usecase.GetListingsUseCase
 
 class DiscoverViewModel(
-    private val getListingsUseCase: GetListingsUseCase // <-- MUDANÇA: UseCase correto
+    private val getListingsUseCase: GetListingsUseCase
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(DiscoverState()) // <-- MUDANÇA: State correto
+    private val _state = MutableStateFlow(DiscoverState())
     val state = _state.asStateFlow()
 
-    // Lembre-se: a chamada inicial de dados será feita pela UI com LaunchedEffect,
-    // então o 'init' aqui não é mais necessário. A UI terá o controle.
+    init {
+        loadListings() // 👈 carregamento inicial direto no VM
+    }
 
-    fun onEvent(event: DiscoverEvent) { // <-- MUDANÇA: Event correto
+    fun onEvent(event: DiscoverEvent) {
         when (event) {
-            DiscoverEvent.LoadListings -> {
-                loadListings()
-            }
+            DiscoverEvent.LoadListings -> loadListings()
         }
     }
 
-    fun loadListings() {
+    private fun loadListings() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
 
             getListingsUseCase()
-                .onSuccess { listingsResult ->
-                    _state.update { it.copy(isLoading = false, listings = listingsResult) }
+                .onSuccess { listings ->
+                    _state.update { it.copy(isLoading = false, listings = listings) }
                 }
-                .onFailure { error ->
-                    _state.update { it.copy(isLoading = false, error = error.message) }
+                .onFailure { e ->
+                    _state.update { it.copy(isLoading = false, error = e.message) }
                 }
         }
     }

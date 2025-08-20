@@ -8,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,10 +32,7 @@ class DiscoverScreen(
         val viewModel: DiscoverViewModel = koinViewModel()
         val state by viewModel.state.collectAsState()
 
-        // Inicia o carregamento dos dados quando a tela aparece
-        LaunchedEffect(Unit) {
-            viewModel.onEvent(DiscoverEvent.LoadListings)
-        }
+        // Inicia o carregamento dos dados quando a tela aparec
 
         // Passa o estado e os eventos para a UI "burra"
         DiscoverScreenContent(

@@ -13,35 +13,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import cafe.adriel.voyager.transitions.SlideTransition
-import org.example.bnb.core.navigation.AppRoute
 import org.example.bnb.discover.ui.DiscoverScreen
-import org.example.bnb.listingdetails.ui.ListingDetailsScreen
 
 internal object DiscoverTab : Tab {
     override val options: TabOptions
         @Composable get() {
             val icon = rememberVectorPainter(Icons.Default.Search)
-            return androidx.compose.runtime.remember {
-                TabOptions(index = 0u, title = "Descobrir", icon = icon)
-            }
+            return remember { TabOptions(index = 0u, title = "Descobrir", icon = icon) }
         }
 
     @Composable
     override fun Content() {
-        val rootNavigator = rememberRootNavigator()
-        val appNavigator  = remember(rootNavigator) { AppNavigator(rootNavigator) }
+        val root = rememberRootNavigator()
+        val appNav = remember(root) { AppNavigator(root) }
 
-        // Discover NUNCA conhece Screens concretos.
-        DiscoverScreen(
-            onNavigate = appNavigator::open
-        ).Content()
+        // 👇 evita recriar DiscoverScreen a cada recomposição da aba
+        val screen = remember(appNav) { DiscoverScreen(onNavigate = appNav::open) }
+        screen.Content()
     }
 }
 

@@ -20,6 +20,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.crossfade
 import org.example.bnb.discover.domain.model.Listing
 
 @Composable
@@ -39,7 +41,10 @@ fun ListingItem(
         ) {
             // Imagem de fundo
             AsyncImage(
-                model = listing.imageUrl,
+                model = coil3.request.ImageRequest.Builder(LocalPlatformContext.current) // veja nota abaixo
+                    .data(listing.imageUrl)
+                    .crossfade(true)            // 👈 fade suave
+                    .build(),
                 contentDescription = listing.name,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
