@@ -20,22 +20,29 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import org.example.bnb.core.navigation.AppRoute
 import org.example.bnb.search.domain.model.SearchResult // Importe o modelo de domínio
 import org.koin.compose.viewmodel.koinViewModel
 
 // O objeto Screen da Voyager agora injeta o ViewModel
-object SearchScreen : Screen {
+data class SearchScreen(
+    private val onNavigate: (AppRoute) -> Unit
+) : Screen {
+
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-        val viewModel: SearchViewModel = koinViewModel()
+        val viewModel: SearchViewModel = koinViewModel() // se você tiver VM
         val state by viewModel.state.collectAsState()
+        val navigator = LocalNavigator.currentOrThrow
 
+        // Passe o callback para o conteúdo de UI
         SearchScreenContent(
             state = state,
             onEvent = viewModel::onEvent,
-            onNavigateBack = { navigator.pop() },
-            onResultClick = { /* Lógica futura */ }
+            onResultClick = { listingId ->
+                onNavigate(AppRoute.ListingDetails(listingId))
+            },
+            onNavigateBack = { navigator.pop()  }
         )
     }
 }

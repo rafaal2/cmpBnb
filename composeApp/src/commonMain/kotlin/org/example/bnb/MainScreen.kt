@@ -18,11 +18,12 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import org.example.bnb.core.navigation.AppRoute
+import org.example.bnb.navigation.AppNavigator
 import org.example.bnb.navigation.DiscoverTab
 import org.example.bnb.navigation.FavoritesTab
 import org.example.bnb.navigation.ProfileTab
 import org.example.bnb.navigation.ReserveTab
-import org.example.bnb.search.ui.SearchScreen // Importe a tela de busca
 
 /**
  * Define a MainScreen como um objeto 'Screen' da Voyager.
@@ -43,12 +44,11 @@ object MainScreen : Screen {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MainScreenContent() {
-    // Pega o Navigator principal (que foi criado no App.kt).
-    // Usaremos ele para abrir telas por cima das abas, como a de busca.
-    val navigator = LocalNavigator.currentOrThrow
+    val rootNavigator = LocalNavigator.currentOrThrow
+    val appNavigator  = androidx.compose.runtime.remember(rootNavigator) { AppNavigator(rootNavigator) }
 
     // O TabNavigator gerencia o estado das abas (qual está selecionada).
-    TabNavigator(DiscoverTab) { tabNavigator ->
+    TabNavigator(DiscoverTab) {
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -59,10 +59,7 @@ private fun MainScreenContent() {
                                 .fillMaxWidth()
                                 .padding(end = 16.dp)
                                 .height(48.dp)
-                                .clickable {
-                                    // AÇÃO: Navega para a tela de busca real ao ser clicada
-                                    navigator.push(SearchScreen)
-                                }
+                                .clickable { appNavigator.open(AppRoute.Search) }
                                 .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
                                 .padding(horizontal = 16.dp),
                             verticalAlignment = Alignment.CenterVertically,

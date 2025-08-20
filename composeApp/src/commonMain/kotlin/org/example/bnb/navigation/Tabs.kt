@@ -28,20 +28,19 @@ internal object DiscoverTab : Tab {
     override val options: TabOptions
         @Composable get() {
             val icon = rememberVectorPainter(Icons.Default.Search)
-            return remember { TabOptions(index = 0u, title = "Descobrir", icon = icon) }
+            return androidx.compose.runtime.remember {
+                TabOptions(index = 0u, title = "Descobrir", icon = icon)
+            }
         }
 
     @Composable
     override fun Content() {
         val rootNavigator = rememberRootNavigator()
+        val appNavigator  = remember(rootNavigator) { AppNavigator(rootNavigator) }
 
+        // Discover NUNCA conhece Screens concretos.
         DiscoverScreen(
-            onNavigate = { route ->
-                when (route) {
-                    is AppRoute.ListingDetails -> rootNavigator.push(ListingDetailsScreen(route.listingId))
-                    is AppRoute.Search -> { /* rootNavigator.push(SearchScreen) */ }
-                }
-            }
+            onNavigate = appNavigator::open
         ).Content()
     }
 }
