@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -18,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -111,9 +109,9 @@ private fun DetailsContent(
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 HeaderSection(details = details)
-                Divider()
+                HorizontalDivider(thickness = 4.dp)
                 HostSection(host = details.host)
-                Divider()
+                HorizontalDivider(thickness = 4.dp)
                 DescriptionSection(description = details.description)
                 // Aqui você adicionaria as seções de comodidades e reviews no futuro
             }
@@ -158,7 +156,7 @@ private fun DetailsTopAppBar(
             Icon(
                 imageVector = if (isFavorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                 contentDescription = "Favoritar",
-                tint = if (isFavorited) Color.Red else Color.Black
+                tint = if (isFavorited) MaterialTheme.colorScheme.primary else Color.Black
             )
         }
     }

@@ -33,11 +33,12 @@ plugins {
 }
 
 include(":composeApp")
-include(":core-database")
+include(":core-ui")
 include(":core-network")
 include(":core-navigation")
 
 include(":feature-discover")
 include(":feature-login")
 include(":feature-search")
+include(":feature-profile")
 include(":feature-listing-details")

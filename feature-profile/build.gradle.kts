@@ -43,8 +43,6 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.tab.navigator)
             implementation(libs.voyager.transitions)
-            implementation(project(":feature-listing-details"))
-            implementation(project(":core-navigation"))
         }
 
         // Dependências específicas de cada plataforma, se houver
@@ -59,7 +57,7 @@ kotlin {
 
 // Configuração mínima para que o módulo seja uma biblioteca Android válida
 android {
-    namespace = "org.example.bnb.search"
+    namespace = "org.example.bnb.profile"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

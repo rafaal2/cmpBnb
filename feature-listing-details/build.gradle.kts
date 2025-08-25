@@ -31,7 +31,6 @@ kotlin {
 
             // Dependências dos módulos core que a feature precisa
             implementation(projects.coreNetwork)
-            implementation(projects.coreDatabase) // Adicione esta se o game usar o DB
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)

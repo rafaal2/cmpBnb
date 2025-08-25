@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import org.example.bnb.discover.ui.DiscoverScreen
+import org.example.bnb.profile.ui.ProfileScreen
 
 internal object DiscoverTab : Tab {
     override val options: TabOptions
@@ -72,7 +73,7 @@ internal object ProfileTab : Tab {
 
     @Composable
     override fun Content() {
-        ComingSoonScreen(tabName = "Perfil")
+        ProfileScreen.Content()
     }
 }
 
