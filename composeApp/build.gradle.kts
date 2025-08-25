@@ -63,6 +63,7 @@ kotlin {
             implementation(project(":feature-discover"))
             implementation(project(":feature-search"))
             implementation(project(":feature-profile"))
+            implementation(project(":feature-favorites"))
             implementation(project(":feature-listing-details"))
             implementation(project(":core-navigation"))
             implementation(libs.voyager.navigator)

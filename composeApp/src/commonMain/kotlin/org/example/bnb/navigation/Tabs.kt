@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import org.example.bnb.discover.ui.DiscoverScreen
+import org.example.bnb.favorites.ui.FavoritesScreen
 import org.example.bnb.profile.ui.ProfileScreen
 
 internal object DiscoverTab : Tab {
@@ -46,7 +47,7 @@ internal object FavoritesTab : Tab {
 
     @Composable
     override fun Content() {
-        ComingSoonScreen(tabName = "Favoritos")
+        FavoritesScreen.Content()
     }
 }
 
