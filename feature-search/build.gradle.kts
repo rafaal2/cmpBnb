@@ -43,7 +43,6 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.tab.navigator)
             implementation(libs.voyager.transitions)
-            implementation(project(":feature-listing-details"))
             implementation(project(":core-navigation"))
         }
 

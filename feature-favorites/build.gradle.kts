@@ -43,6 +43,7 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.tab.navigator)
             implementation(libs.voyager.transitions)
+            implementation(project(":core-navigation"))
         }
 
         // Dependências específicas de cada plataforma, se houver

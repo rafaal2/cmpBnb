@@ -47,7 +47,11 @@ internal object FavoritesTab : Tab {
 
     @Composable
     override fun Content() {
-        FavoritesScreen.Content()
+        val root = rememberRootNavigator()
+        val appNav = remember(root) { AppNavigator(root) }
+
+        val screen = remember(appNav) {FavoritesScreen(onNavigate = appNav::open) }
+        screen.Content()
     }
 }
 

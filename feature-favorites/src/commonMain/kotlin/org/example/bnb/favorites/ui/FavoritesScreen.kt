@@ -14,9 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import org.example.bnb.core.navigation.AppRoute
 import org.koin.compose.viewmodel.koinViewModel
 
-object FavoritesScreen : Screen {
+class FavoritesScreen(
+    private val onNavigate: (AppRoute) -> Unit // 👈 2. RECEBE O "MENSAGEIRO" DE NAVEGAÇÃO
+) : Screen {
     @Composable
     override fun Content() {
         val viewModel: FavoritesViewModel = koinViewModel()
@@ -31,6 +34,10 @@ object FavoritesScreen : Screen {
             onRemoveClick = { listingId ->
                 viewModel.onEvent(FavoritesEvent.RemoveFavorite(listingId))
             },
+            onListingClick = { listingId ->
+                // 👇 3. USA O CONTRATO PARA PEDIR A NAVEGAÇÃO
+                onNavigate(AppRoute.ListingDetails(listingId = listingId))
+            },
             onRetryClick = {
                 viewModel.onEvent(FavoritesEvent.LoadFavorites)
             }
@@ -43,6 +50,7 @@ object FavoritesScreen : Screen {
 private fun FavoritesScreenContent(
     state: FavoritesState,
     onRemoveClick: (listingId: String) -> Unit,
+    onListingClick: (listingId: String) -> Unit,
     onRetryClick: () -> Unit
 ) {
     Box(
@@ -71,7 +79,7 @@ private fun FavoritesScreenContent(
                     // Estamos usando o mesmo 'ListingItem' da feature 'discover'.
                     FavoriteItem(
                         listing = listing, // O tipo de dados precisa ser compatível
-                        onClick = { /* Navegar para os detalhes */ }
+                        onClick = { onListingClick(listing.id) }
                         // Poderíamos adicionar um botão de "remover" aqui
                     )
                 }

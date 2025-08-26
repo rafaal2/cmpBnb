@@ -27,7 +27,7 @@ import org.example.bnb.navigation.DiscoverTab
 import org.example.bnb.navigation.FavoritesTab
 import org.example.bnb.navigation.ProfileTab
 import org.example.bnb.navigation.ReserveTab
-import org.example.bnb.ui.theme.primaryGradientBrush // Supondo que este é o seu gradiente verde
+import org.example.bnb.ui.theme.primaryGradientBrush
 
 object MainScreen : Screen {
     @Composable
@@ -58,25 +58,22 @@ private fun MainScreenContent() {
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            // 👇 CORREÇÃO: Mude a cor (tint) do Ícone
                             Icon(
                                 imageVector = Icons.Default.Search,
                                 contentDescription = "Ícone de busca",
-                                tint = MaterialTheme.colorScheme.onPrimary // Usa a cor do conteúdo sobre a cor primária (geralmente branco)
+                                tint = MaterialTheme.colorScheme.onPrimary
                             )
-                            // 👇 CORREÇÃO: Mude a cor do Texto
                             Text(
                                 text = "Para onde vamos?",
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 style = MaterialTheme.typography.titleMedium
-                                // Usa a mesma cor para o texto
                             )
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent
                     ),
-                    modifier = Modifier.background(brush = primaryGradientBrush()) // Supondo que este seja seu gradiente verde
+                    modifier = Modifier.background(brush = primaryGradientBrush())
                 )
             },
             content = { paddingValues ->
@@ -86,7 +83,6 @@ private fun MainScreenContent() {
             },
             bottomBar = {
                 NavigationBar(
-                    // 👇 CORREÇÃO 2: O gradiente é aplicado da mesma forma aqui.
                     modifier = Modifier.background(brush = primaryGradientBrush()),
                     containerColor = Color.Transparent
                 ) {
