@@ -20,7 +20,8 @@ data class ListingDetails(
     val host: Host,
     val location: Location,
     val amenities: List<Amenity>,
-    val latestReviews: List<Review>
+    val latestReviews: List<Review>,
+    val isFavorite: Boolean
 )
 
 data class Host(

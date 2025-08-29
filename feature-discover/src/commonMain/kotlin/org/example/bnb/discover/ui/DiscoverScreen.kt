@@ -32,9 +32,7 @@ class DiscoverScreen(
         val viewModel: DiscoverViewModel = koinViewModel()
         val state by viewModel.state.collectAsState()
 
-        // Inicia o carregamento dos dados quando a tela aparec
 
-        // Passa o estado e os eventos para a UI "burra"
         DiscoverScreenContent(
             state = state,
             onListingClick = { listingId ->
@@ -48,10 +46,6 @@ class DiscoverScreen(
     }
 }
 
-/**
- * O Composable que contém apenas a UI da tela.
- * Ele não sabe nada sobre navegação, apenas recebe callbacks.
- */
 @Composable
 private fun DiscoverScreenContent(
     modifier: Modifier = Modifier,

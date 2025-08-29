@@ -9,10 +9,6 @@ import cafe.adriel.voyager.transitions.SlideTransition
 import org.example.bnb.ui.theme.BnbTheme
 import org.example.bnb.login.ui.LoginScreen
 
-/**
- * Define os pontos de entrada principais da navegação do app.
- * Cada objeto implementa a interface 'Screen' da Voyager.
- */
 sealed class AppScreen : Screen {
     @Composable
     override fun Content() {
@@ -45,9 +41,7 @@ sealed class AppScreen : Screen {
 @Composable
 fun App(startScreen: AppScreen) {
     BnbTheme {
-        // O Navigator da Voyager gerencia toda a pilha de navegação.
         Navigator(screen = startScreen) { navigator ->
-            // Aplica uma animação de transição a todas as telas.
             SlideTransition(navigator)
         }
     }

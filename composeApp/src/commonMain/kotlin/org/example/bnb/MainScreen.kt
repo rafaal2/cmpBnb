@@ -53,7 +53,7 @@ private fun MainScreenContent() {
                                 .padding(end = 16.dp, bottom = 10.dp)
                                 .height(48.dp)
                                 .clickable { appNavigator.open(AppRoute.Search) }
-                                .border(1.dp, MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f), CircleShape) // Borda mais clara
+                                .border(1.dp, MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f), CircleShape)
                                 .padding(horizontal = 16.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)

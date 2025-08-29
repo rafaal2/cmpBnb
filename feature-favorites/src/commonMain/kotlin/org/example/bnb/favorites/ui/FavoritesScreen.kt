@@ -3,15 +3,26 @@ package org.example.bnb.favorites.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import org.example.bnb.core.navigation.AppRoute
@@ -35,7 +46,6 @@ class FavoritesScreen(
                 viewModel.onEvent(FavoritesEvent.RemoveFavorite(listingId))
             },
             onListingClick = { listingId ->
-                // 👇 3. USA O CONTRATO PARA PEDIR A NAVEGAÇÃO
                 onNavigate(AppRoute.ListingDetails(listingId = listingId))
             },
             onRetryClick = {
@@ -46,6 +56,7 @@ class FavoritesScreen(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FavoritesScreenContent(
     state: FavoritesState,
@@ -53,37 +64,83 @@ private fun FavoritesScreenContent(
     onListingClick: (listingId: String) -> Unit,
     onRetryClick: () -> Unit
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+    Column(
+        modifier = Modifier.fillMaxSize()
     ) {
-        if (state.isLoading) {
-            CircularProgressIndicator()
-        } else if (state.error != null) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Erro ao carregar favoritos.")
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = onRetryClick) {
-                    Text("Tentar Novamente")
+        Text(
+            text = "Favoritos",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(16.dp)
+        )
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            if (state.isLoading) {
+                CircularProgressIndicator()
+            } else if (state.error != null) {
+                InfoMessage(
+                    icon = Icons.Default.Warning,
+                    message = "Erro ao carregar favoritos.",
+                    actionButton = { Button(onClick = onRetryClick) { Text("Tentar Novamente") } }
+                )
+            } else if (state.favorites.isEmpty()) {
+                InfoMessage(
+                    icon = Icons.Default.Favorite,
+                    message = "Sua lista de favoritos está vazia.\nToque no coração para adicionar acomodações aqui."
+                )
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(state.favorites, key = { it.id }) { listing ->
+                        FavoriteItem(
+                            listing = listing,
+                            onClick = { onListingClick(listing.id) },
+                            onRemoveClick = { onRemoveClick(listing.id) }
+                        )
+                    }
                 }
             }
-        } else if (state.favorites.isEmpty()) {
-            Text(text = "Você ainda não tem acomodações favoritas.")
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(8.dp)
-            ) {
-                items(state.favorites, key = { it.id }) { listing ->
-                    // Aqui está a mágica da reutilização!
-                    // Estamos usando o mesmo 'ListingItem' da feature 'discover'.
-                    FavoriteItem(
-                        listing = listing, // O tipo de dados precisa ser compatível
-                        onClick = { onListingClick(listing.id) }
-                        // Poderíamos adicionar um botão de "remover" aqui
-                    )
-                }
-            }
+        }
+    }
+}
+
+// O InfoMessage pode ser reutilizado de outra feature ou definido aqui
+@Composable
+private fun InfoMessage(
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
+    message: String,
+    actionButton: (@Composable () -> Unit)? = null
+) {
+    Column(
+        modifier = modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        if (icon != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(48.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        if (actionButton != null) {
+            Spacer(modifier = Modifier.height(16.dp))
+            actionButton()
         }
     }
 }

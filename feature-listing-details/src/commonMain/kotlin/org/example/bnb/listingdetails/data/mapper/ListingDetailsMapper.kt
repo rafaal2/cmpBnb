@@ -26,7 +26,8 @@ fun ListingDetailsDto.toDomainModel(): ListingDetails {
         host = this.host.toDomainModel(),
         location = this.location.toDomainModel(),
         amenities = this.amenities.map { it.toDomainModel() },
-        latestReviews = this.latestReviews.map { it.toDomainModel() }
+        latestReviews = this.latestReviews.map { it.toDomainModel() },
+        isFavorite = false
     )
 }
 

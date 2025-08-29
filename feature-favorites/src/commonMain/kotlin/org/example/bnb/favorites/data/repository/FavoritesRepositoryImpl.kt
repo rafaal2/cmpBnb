@@ -15,7 +15,7 @@ class FavoritesRepositoryImpl(
     private val httpClient: HttpClient
 ) : FavoritesRepository {
 
-    private val FAVORITES_API_URL = "http://10.0.2.2/testeSession/api/favoritos.php"
+    private val FAVORITES_API_URL = "http://gestorwebsaude.com.br/vaidehotel/app/api/favoritos.php"
 
     override suspend fun getFavorites(userId: String): Result<List<FavoriteListing>> {
         return runCatching {

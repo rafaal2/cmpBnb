@@ -22,7 +22,7 @@ class LoginRepositoryImpl(
         return runCatching {
             val requestDto = LoginRequestDto(login = email, senha = password)
 
-            val response: HttpResponse = httpClient.post("http://10.0.2.2/testeSession/api/login.php") {
+            val response: HttpResponse = httpClient.post("http://gestorwebsaude.com.br/vaidehotel/app/api/login.php") {
                 contentType(ContentType.Application.Json)
                 setBody(requestDto)
                 expectSuccess = false

@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 
 // Define o esquema de cores para o MODO CLARO
 private val LightColorScheme = lightColorScheme(
-    primary = LightGreen,
+    primary = NewGreen,
     secondary = Navy,
     tertiary = Chartreuse,
     background = Color.White,

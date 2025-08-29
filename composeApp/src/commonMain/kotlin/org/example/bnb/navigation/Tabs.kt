@@ -31,7 +31,6 @@ internal object DiscoverTab : Tab {
         val root = rememberRootNavigator()
         val appNav = remember(root) { AppNavigator(root) }
 
-        // 👇 evita recriar DiscoverScreen a cada recomposição da aba
         val screen = remember(appNav) { DiscoverScreen(onNavigate = appNav::open) }
         screen.Content()
     }

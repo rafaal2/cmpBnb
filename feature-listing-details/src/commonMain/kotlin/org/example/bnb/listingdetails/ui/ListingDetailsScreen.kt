@@ -41,7 +41,7 @@ data class ListingDetailsScreen(val listingId: String) : Screen {
         ListingDetailsScreenContent(
             state = state,
             onNavigateBack = { navigator.pop() },
-            onFavoriteClick = { /* Lógica futura para favoritar */ },
+            onFavoriteClick = { viewModel.onEvent(ListingDetailsEvent.ToggleFavorite) },
             onReserveClick = { /* Lógica futura para reservar */ }
         )
     }
@@ -119,8 +119,10 @@ private fun DetailsContent(
 
         // TopAppBar flutuante com botões de voltar e favoritar
         DetailsTopAppBar(
+            isFavorited = details.isFavorite,
             onNavigateBack = onNavigateBack,
-            onFavoriteClick = onFavoriteClick
+            onFavoriteClick = onFavoriteClick, // Passa o estado para o botão
+
         )
     }
 }
@@ -130,9 +132,10 @@ private fun DetailsContent(
 @Composable
 private fun DetailsTopAppBar(
     onNavigateBack: () -> Unit,
-    onFavoriteClick: () -> Unit
+    onFavoriteClick: () -> Unit,
+    isFavorited: Boolean // 👈 O estado real, vindo do ViewModel
 ) {
-    var isFavorited by remember { mutableStateOf(false) } // Estado fake
+    // ❌ A linha 'var isFavorited by remember...' FOI REMOVIDA
 
     Row(
         modifier = Modifier
@@ -147,16 +150,16 @@ private fun DetailsTopAppBar(
             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
         }
         IconButton(
-            onClick = {
-                isFavorited = !isFavorited
-                onFavoriteClick()
-            },
+            // O onClick agora apenas notifica o ViewModel.
+            // Ele não precisa mais mudar o estado local.
+            onClick = onFavoriteClick,
             modifier = Modifier.background(Color.White.copy(alpha = 0.7f), CircleShape)
         ) {
             Icon(
+                // ✅ AGORA USA O PARÂMETRO 'isFavorited' CORRETO
                 imageVector = if (isFavorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                 contentDescription = "Favoritar",
-                tint = if (isFavorited) MaterialTheme.colorScheme.primary else Color.Black
+                tint = if (isFavorited) Color.Red else Color.Black
             )
         }
     }

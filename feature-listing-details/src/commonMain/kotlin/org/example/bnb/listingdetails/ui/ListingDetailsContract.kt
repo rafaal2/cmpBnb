@@ -9,7 +9,7 @@ sealed interface ListingDetailsState {
     data class Success(val details: ListingDetails) : ListingDetailsState
 }
 
-// Representa as ações que a UI pode iniciar (por enquanto, nenhuma)
+// Representa as ações que o usuário pode fazer
 sealed interface ListingDetailsEvent {
-    // Ex: object OnFavoriteClick : ListingDetailsEvent
+    object ToggleFavorite : ListingDetailsEvent
 }

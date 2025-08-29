@@ -13,8 +13,6 @@ class AppNavigator(private val root: Navigator) {
             is AppRoute.ListingDetails -> root.push(ListingDetailsScreen(route.listingId))
             AppRoute.Search            -> { root.push(SearchScreen(onNavigate = ::open)) }
             AppRoute.Favorites -> { root.push(FavoritesScreen(onNavigate = ::open)) }
-
-
         }
     }
 }

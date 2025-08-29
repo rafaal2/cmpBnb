@@ -8,4 +8,6 @@ import org.example.bnb.listingdetails.domain.model.ListingDetails
  */
 interface ListingDetailsRepository {
     suspend fun getListingDetails(id: String): Result<ListingDetails>
+    suspend fun addFavorite(userId: String, listingId: String): Result<Unit>
+    suspend fun removeFavorite(userId: String, listingId: String): Result<Unit>
 }

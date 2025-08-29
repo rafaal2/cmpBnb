@@ -14,7 +14,7 @@ class SearchRepositoryImpl(
     private val httpClient: HttpClient
 ) : SearchRepository {
 
-    private val SEARCH_URL = "http://10.0.2.2/testeSession/api/get_acomodacoes_by_name.php"
+    private val SEARCH_URL = "http://gestorwebsaude.com.br/vaidehotel/app/api/get_acomodacoes_by_name.php"
 
     override suspend fun search(query: String): Result<List<SearchResult>> {
         return runCatching {

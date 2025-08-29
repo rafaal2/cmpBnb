@@ -14,7 +14,7 @@ class ListingRepositoryImpl(
 ) : ListingRepository {
 
     // 👇 MUDANÇA: A URL agora aponta para o seu servidor PHP local
-    private val GET_ALL_URL = "http://10.0.2.2/testeSession/api/get_all_acomodacoes.php"
+    private val GET_ALL_URL = "http://gestorwebsaude.com.br/vaidehotel/app/api/get_all_acomodacoes.php"
 
     override suspend fun getListings(): Result<List<Listing>> {
         return runCatching {

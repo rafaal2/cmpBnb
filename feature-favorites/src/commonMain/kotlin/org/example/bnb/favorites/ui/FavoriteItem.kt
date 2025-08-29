@@ -3,11 +3,12 @@ package org.example.bnb.favorites.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,42 +20,45 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.example.bnb.favorites.domain.model.FavoriteListing
 
-
 @Composable
 fun FavoriteItem(
     listing: FavoriteListing,
     onClick: () -> Unit,
+    onRemoveClick: () -> Unit, // Novo callback para a ação de remover
     modifier: Modifier = Modifier
 ) {
+    var showMenu by remember { mutableStateOf(false) } // Estado para controlar o menu
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        // 👇 MUDANÇA AQUI: Cor do contêiner do Card para um cinza mais claro
+        // Usei surfaceColorAtElevation(1.dp) para uma cor levemente diferente do fundo do Scaffold
+        // ou você pode usar MaterialTheme.colorScheme.surfaceVariant para um cinza mais perceptível
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
+        // Ou se preferir um cinza mais definido:
+        // colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f))
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Imagem da acomodação
             AsyncImage(
                 model = listing.imageUrl,
                 contentDescription = listing.name,
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(90.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop,
-                placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceVariant),
-                error = ColorPainter(MaterialTheme.colorScheme.surfaceVariant)
+                placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceVariant)
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Coluna para Nome e Preço
-            Column(
-                modifier = Modifier.weight(1f) // Ocupa o espaço restante
-            ) {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = listing.name,
                     style = MaterialTheme.typography.titleMedium,
@@ -65,31 +69,45 @@ fun FavoriteItem(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                Text(
-                    text = "R$ ${listing.price} / noite",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = "Avaliação",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = listing.rating.toString(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            Box {
+                IconButton(onClick = { showMenu = true }) {
+                    Icon(Icons.Default.MoreVert, contentDescription = "Mais opções")
+                }
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("Excluir") },
+                        onClick = {
+                            onRemoveClick()
+                            showMenu = false
+                        },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Outlined.Delete,
+                                contentDescription = "Excluir"
+                            )
+                        }
+                    )
+                }
             }
         }
     }
 }
-
-
-// Preview para visualizar o componente isoladamente
-//@Preview
-//@Composable
-//private fun FavoriteItemPreview() {
-//    BnbTheme {
-//        FavoriteItem(
-//            listing = FavoriteListing(
-//                id = "1",
-//                name = "Cabana Aconchegante na Floresta com um nome muito grande para testar o overflow",
-//                imageUrl = "",
-//                price = 420.50,
-//                rating = 4.92
-//            ),
-//            onClick = {}
-//        )
-//    }
-//}

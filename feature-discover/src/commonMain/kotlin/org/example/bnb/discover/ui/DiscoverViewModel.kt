@@ -16,7 +16,7 @@ class DiscoverViewModel(
     val state = _state.asStateFlow()
 
     init {
-        loadListings() // 👈 carregamento inicial direto no VM
+        loadListings()
     }
 
     fun onEvent(event: DiscoverEvent) {

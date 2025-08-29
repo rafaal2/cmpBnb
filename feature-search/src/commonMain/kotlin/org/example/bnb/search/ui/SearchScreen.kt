@@ -1,53 +1,56 @@
 package org.example.bnb.search.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import coil3.compose.AsyncImage
 import org.example.bnb.core.navigation.AppRoute
-import org.example.bnb.search.domain.model.SearchResult // Importe o modelo de domínio
+import org.example.bnb.search.domain.model.SearchResult
 import org.koin.compose.viewmodel.koinViewModel
 
-// O objeto Screen da Voyager agora injeta o ViewModel
 data class SearchScreen(
     private val onNavigate: (AppRoute) -> Unit
 ) : Screen {
-
     @Composable
     override fun Content() {
-        val viewModel: SearchViewModel = koinViewModel() // se você tiver VM
+        val viewModel: SearchViewModel = koinViewModel()
         val state by viewModel.state.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
 
-        // Passe o callback para o conteúdo de UI
         SearchScreenContent(
             state = state,
             onEvent = viewModel::onEvent,
-            onResultClick = { listingId ->
-                onNavigate(AppRoute.ListingDetails(listingId))
-            },
-            onNavigateBack = { navigator.pop()  }
+            onResultClick = { listingId -> onNavigate(AppRoute.ListingDetails(listingId)) },
+            onNavigateBack = { navigator.pop() }
         )
     }
 }
 
-// O Composable de UI agora é "burro", apenas recebe o estado e os eventos
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchScreenContent(
@@ -65,7 +68,7 @@ private fun SearchScreenContent(
         topBar = {
             TopAppBar(
                 title = {
-                    OutlinedTextField(
+                    TextField(
                         value = state.searchQuery,
                         onValueChange = { onEvent(SearchEvent.OnQueryChange(it)) },
                         modifier = Modifier
@@ -80,12 +83,15 @@ private fun SearchScreenContent(
                                 }
                             }
                         },
+                        // Cores customizadas para o TextField
                         colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color.Transparent,
+                            focusedIndicatorColor = MaterialTheme.colorScheme.primary, // Linha de foco na cor primária
                             unfocusedIndicatorColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
                             focusedContainerColor = Color.Transparent
                         ),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                        keyboardActions = KeyboardActions(onSearch = { /* Lógica de submeter a busca */ }),
                         singleLine = true
                     )
                 },
@@ -95,6 +101,14 @@ private fun SearchScreenContent(
                     }
                 }
             )
+        },
+        // Botão flutuante para filtros
+        floatingActionButton = {
+            AnimatedVisibility(visible = state.searchResults.isNotEmpty()) {
+                FloatingActionButton(onClick = { /* Abrir tela de filtros */ }) {
+                    Icon(Icons.Default.FilterList, contentDescription = "Filtros")
+                }
+            }
         }
     ) { paddingValues ->
         val listModifier = Modifier.fillMaxSize().padding(paddingValues)
@@ -104,21 +118,21 @@ private fun SearchScreenContent(
                 CircularProgressIndicator()
             } else if (state.error != null) {
                 Text(state.error, textAlign = TextAlign.Center)
-            } else if (state.searchQuery.length < 3) {
+            } else if (state.searchQuery.length < 3 && state.searchResults.isEmpty()) {
                 Text("Digite pelo menos 3 caracteres para buscar.", textAlign = TextAlign.Center)
             } else if (state.searchResults.isEmpty()) {
                 Text("Nenhum resultado encontrado.", textAlign = TextAlign.Center)
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp)
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(state.searchResults) { result ->
                         SearchResultCard(
                             result = result,
                             onClick = { onResultClick(result.id) }
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
             }
@@ -126,7 +140,7 @@ private fun SearchScreenContent(
     }
 }
 
-// O Card de resultado agora usa o modelo de domínio 'SearchResult'
+
 @Composable
 private fun SearchResultCard(
     result: SearchResult,
@@ -134,36 +148,33 @@ private fun SearchResultCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Aqui entraria a imagem (AsyncImage(model = result.imageUrl, ...))
+            AsyncImage(
+                model = result.imageUrl,
+                contentDescription = result.title,
+                modifier = Modifier
+                    .size(72.dp) // Um pouco menor para um visual de lista
+                    .aspectRatio(1f)
+                    .clip(MaterialTheme.shapes.small),
+                contentScale = ContentScale.Crop
+            )
+
             Spacer(modifier = Modifier.width(16.dp))
-            Column {
+
+            Column(modifier = Modifier.weight(1f)) {
                 Text(result.title, style = MaterialTheme.typography.titleMedium)
-                Text(result.subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    result.subtitle,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }
 }
-
-// Preview para testar a UI com diferentes estados
-//@Preview
-//@Composable
-//private fun SearchScreenPreview() {
-//    BnbTheme {
-//        val fakeResults = listOf(
-//            SearchResult("1", "Cabana Aconchegante", "R$ 420.00 / noite", ""),
-//            SearchResult("2", "Loft Moderno", "R$ 310.50 / noite", ""),
-//        )
-//        SearchScreenContent(
-//            state = SearchState(searchQuery = "cabana", searchResults = fakeResults),
-//            onEvent = {},
-//            onNavigateBack = {},
-//            onResultClick = {}
-//        )
-//    }
-//}
