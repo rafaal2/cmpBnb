@@ -13,7 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -83,8 +85,13 @@ private fun MainScreenContent() {
             },
             bottomBar = {
                 NavigationBar(
-                    modifier = Modifier.background(brush = primaryGradientBrush()),
+                    // 👇 SUBSTITUA O MODIFIER.height() POR ESTE
+                    modifier = Modifier
+                        .background(brush = primaryGradientBrush())
+                        .height(105.dp)
+                        .windowInsetsPadding(WindowInsets.navigationBars),
                     containerColor = Color.Transparent
+
                 ) {
                     TabNavigationItem(tab = DiscoverTab)
                     TabNavigationItem(tab = FavoritesTab)
@@ -101,17 +108,41 @@ private fun RowScope.TabNavigationItem(tab: Tab) {
     val tabNavigator = LocalTabNavigator.current
 
     NavigationBarItem(
-        selected = tabNavigator.current.options.index == tab.options.index,
+        selected = tabNavigator.current.key == tab.key,
         onClick = { tabNavigator.current = tab },
-        icon = { Icon(painter = tab.options.icon!!, contentDescription = tab.options.title) },
-        label = { Text(tab.options.title) },
+
+        // 👇 A MÁGICA ACONTECE AQUI.
+        // Em vez de passar um Icon simples, criamos nosso próprio layout.
+        icon = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(bottom = 2.dp) // Pequeno ajuste de espaçamento
+            ) {
+                Icon(
+                    painter = tab.options.icon!!,
+                    contentDescription = tab.options.title,
+                    modifier = Modifier.size(24.dp) // Tamanho fixo para o ícone
+                )
+
+                // Texto com tamanho de fonte menor
+                Text(
+                    text = tab.options.title,
+                    fontSize = 12.sp, // Tamanho da fonte reduzido
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        },
+
+        // Como já colocamos o texto dentro do 'icon', o 'label' fica vazio.
+        label = null,
+
+        // As cores customizadas continuam as mesmas
         colors = NavigationBarItemDefaults.colors(
             selectedIconColor = MaterialTheme.colorScheme.onPrimary,
-            unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
-            selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-            unselectedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
+            unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f),
+            // A cor do texto agora é controlada dentro da nossa Column
             indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
         )
-
     )
 }
